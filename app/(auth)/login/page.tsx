@@ -104,9 +104,7 @@ export default function LoginPage() {
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
-                  onCheckedChange={(checked) =>
-                    setRememberMe(Boolean(checked))
-                  }
+                  onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
                   className="border-[#d1d1d1] data-[state=checked]:bg-[#05364c] data-[state=checked]:border-[#5c4b3a]"
                 />
                 <Label
@@ -130,10 +128,10 @@ export default function LoginPage() {
           <p className="text-center mt-6 text-sm text-[#666666]">
             Don't have an account?{" "}
             <Link
-              href="/signup"
+              href="/signin"
               className="text-[#1a1a1a] font-medium hover:underline"
             >
-              Sign up
+              Sign in
             </Link>
           </p>
         </div>
@@ -141,9 +139,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <div className="mt-auto pt-8">
-        <p className="text-[#666666] text-sm">
-          © 2026 MedNinja Technologies Inc.
-        </p>
+        <p className="text-[#666666] text-sm">© 2026 Career Forge AI.</p>
       </div>
     </div>
   );

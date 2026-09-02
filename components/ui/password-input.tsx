@@ -9,10 +9,11 @@ import { cn } from "@/lib/utils";
 export interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  showToggle?: boolean;
 }
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ className, label, id = "password", ...props }, ref) => {
+  ({ className, label, id = "password", showToggle = true, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
     return (
@@ -27,22 +28,28 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           <Input
             id={id}
             type={showPassword ? "text" : "password"}
-            className={cn("h-11 pl-10 pr-10 border-[#e0e0e0] rounded-lg", className)}
+            className={cn(
+              "h-11 pl-10 border-[#e0e0e0] rounded-lg",
+              showToggle ? "pr-10" : "pr-3",
+              className
+            )}
             ref={ref}
             {...props}
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-gray-600 focus:outline-none"
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5" />
-            ) : (
-              <Eye className="h-5 w-5" />
-            )}
-          </button>
+          {showToggle && (
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-gray-600 focus:outline-none"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     );
