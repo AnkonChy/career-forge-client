@@ -4,13 +4,22 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { CheckCircle2, FileText, UploadCloud, Loader2, AlertCircle, Sparkles } from "lucide-react";
+import {
+  CheckCircle2,
+  FileText,
+  UploadCloud,
+  Loader2,
+  AlertCircle,
+  Sparkles,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const ACCEPTED_TYPES = [".pdf", ".doc", ".docx"];
 
 export default function AnalyzePage() {
+  const axiosPublic = useAxiosPublic();
   const router = useRouter();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -36,32 +45,29 @@ export default function AnalyzePage() {
       const formData = new FormData();
       formData.append("resume", selectedFile);
 
-      const response = await axios.post(
-        "http://localhost:7000/api/resume/analyze",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axiosPublic.post("/api/resume/analyze", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.data && response.data.success) {
         sessionStorage.setItem(
           "resumeAnalysisResult",
-          JSON.stringify(response.data.data)
+          JSON.stringify(response.data.data),
         );
         router.push("/analyze/result");
       } else {
         setErrorMsg(
-          response.data?.message || "Failed to analyze resume. Please try again."
+          response.data?.message ||
+            "Failed to analyze resume. Please try again.",
         );
       }
     } catch (err: any) {
       console.error("Resume analysis error:", err);
       setErrorMsg(
         err.response?.data?.message ||
-          "An error occurred while uploading. Make sure backend is running at http://localhost:7000"
+          "An error occurred while uploading. Make sure backend is running at http://localhost:7000",
       );
     } finally {
       setIsLoading(false);
@@ -80,7 +86,8 @@ export default function AnalyzePage() {
             Analyze Your Resume
           </h1>
           <p className="mt-4 text-base text-neutral-600 dark:text-neutral-400">
-            Get instant feedback on your resume. Discover strength scores, missing keywords, and targeted improvements in seconds.
+            Get instant feedback on your resume. Discover strength scores,
+            missing keywords, and targeted improvements in seconds.
           </p>
         </div>
 
@@ -100,7 +107,7 @@ export default function AnalyzePage() {
               "flex flex-col items-center rounded-3xl border-2 border-dashed bg-neutral-50/60 px-8 py-8 text-center transition-colors dark:bg-neutral-900/50",
               isDragging
                 ? "border-orange-500 bg-orange-50/60 dark:bg-orange-500/[0.06]"
-                : "border-neutral-300 dark:border-neutral-700"
+                : "border-neutral-300 dark:border-neutral-700",
             )}
           >
             <p className="text-xl font-semibold text-neutral-900 dark:text-white">
