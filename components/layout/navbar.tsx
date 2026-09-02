@@ -48,7 +48,7 @@ export function Navbar() {
                 href={link.href}
                 className={cn(
                   "relative px-3.5 py-2 text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white",
-                  active && "text-neutral-900 dark:text-white"
+                  active && "text-neutral-900 dark:text-white",
                 )}
               >
                 {link.label}
@@ -63,7 +63,7 @@ export function Navbar() {
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/sign-in">Sign in</Link>
+            <Link href="/signin">Sign in</Link>
           </Button>
           <Button
             size="sm"
@@ -102,7 +102,7 @@ export function Navbar() {
                     className={cn(
                       "rounded-md px-3 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
                       pathname === link.href &&
-                        "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white"
+                        "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white",
                     )}
                   >
                     {link.label}

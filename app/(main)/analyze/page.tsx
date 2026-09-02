@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAxiosPublic from "@/app/hooks/useAxiosPublic";
 
 const ACCEPTED_TYPES = [".pdf", ".doc", ".docx"];
 

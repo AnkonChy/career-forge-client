@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Flame, ArrowRight } from "lucide-react";
 import { FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const FOOTER_NAV = {
