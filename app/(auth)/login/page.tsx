@@ -10,6 +10,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAxiosPublic from "@/app/hooks/useAxiosPublic";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type LoginInputs = {
   email: string;
@@ -19,6 +20,7 @@ type LoginInputs = {
 export default function LoginPage() {
   const router = useRouter();
   const axiosPublic = useAxiosPublic();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [rememberMe, setRememberMe] = useState(false);
 
   const {
@@ -37,6 +39,21 @@ export default function LoginPage() {
       });
 
       if (response.data) {
+        const resData = response.data;
+        const token =
+          resData.token ||
+          resData.accessToken ||
+          resData.data?.token ||
+          resData.data?.accessToken ||
+          null;
+        const user =
+          resData.user ||
+          resData.data?.user ||
+          (resData.data && !resData.data?.token ? resData.data : null) || {
+            email: data.email,
+          };
+
+        setAuth(user, token);
         router.push("/");
       }
     } catch (error: any) {

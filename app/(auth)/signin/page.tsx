@@ -32,31 +32,48 @@ export default function RegisterPage() {
 
   const onSubmit: SubmitHandler<SignupInputs> = async (data) => {
     try {
-      const response = await axiosPublic.post("/api/auth/register", {
-        first_name: data.firstName,
-        last_name: data.lastName,
+      const response = await axiosPublic.post("/api/auth/signup", {
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         password: data.password,
         confirmPassword: data.confirmPassword,
       });
+
       console.log(response);
+
       reset();
+
       router.push("/login");
     } catch (error) {
-      const backendErrors =
-        axios.isAxiosError(error) && error.response?.data?.errors?.body;
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const { errors: fieldErrors, message } = error.response.data;
 
-      if (backendErrors) {
-        backendErrors.first_name &&
-          setError("firstName", { message: backendErrors.first_name });
-        backendErrors.last_name &&
-          setError("lastName", { message: backendErrors.last_name });
-        backendErrors.email &&
-          setError("email", { message: backendErrors.email });
-        backendErrors.password &&
-          setError("password", { message: backendErrors.password });
-      } else if (axios.isAxiosError(error) && error.response?.data?.message) {
-        setError("email", { message: error.response.data.message });
+        if (fieldErrors) {
+          if (fieldErrors.firstName || fieldErrors.first_name) {
+            setError("firstName", {
+              message: fieldErrors.firstName || fieldErrors.first_name,
+            });
+          }
+          if (fieldErrors.lastName || fieldErrors.last_name) {
+            setError("lastName", {
+              message: fieldErrors.lastName || fieldErrors.last_name,
+            });
+          }
+          if (fieldErrors.email) {
+            setError("email", { message: fieldErrors.email });
+          }
+          if (fieldErrors.password) {
+            setError("password", { message: fieldErrors.password });
+          }
+          if (fieldErrors.confirmPassword) {
+            setError("confirmPassword", {
+              message: fieldErrors.confirmPassword,
+            });
+          }
+        } else if (message) {
+          setError("email", { message });
+        }
       }
     }
   };

@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Flame, Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Flame, Menu, LogOut, User as UserIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import { useAuth } from "@/store/useAuthStore";
 
 const NAV_LINKS = [
   { href: "/jobs", label: "Find jobs" },
@@ -24,6 +25,18 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isAuthenticated, isLoaded, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
+
+  const displayName =
+    user?.firstName ||
+    user?.first_name ||
+    (user?.email ? user.email.split("@")[0] : "User");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/80 bg-white/85 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/85">
@@ -61,17 +74,39 @@ export function Navbar() {
         </nav>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/signin">Sign in</Link>
-          </Button>
-          <Button
-            size="sm"
-            asChild
-            className="bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
-          >
-            <Link href="/get-started">Get started</Link>
-          </Button>
+        <div className="hidden items-center gap-2 md:flex min-w-[140px] justify-end">
+          {!isLoaded ? (
+            <div className="h-9 w-36 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
+          ) : isAuthenticated ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
+                <UserIcon className="h-4 w-4 text-neutral-500" />
+                {displayName}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="cursor-pointer gap-1.5"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button
+                size="sm"
+                asChild
+                className="bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+              >
+                <Link href="/signin">Get started</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile menu */}
@@ -112,19 +147,42 @@ export function Navbar() {
             </nav>
 
             <div className="mt-6 flex flex-col gap-2 border-t border-neutral-200 pt-6 dark:border-neutral-800">
-              <SheetClose asChild>
-                <Button variant="outline" asChild>
-                  <Link href="/sign-in">Sign in</Link>
-                </Button>
-              </SheetClose>
-              <SheetClose asChild>
-                <Button
-                  asChild
-                  className="bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
-                >
-                  <Link href="/get-started">Get started</Link>
-                </Button>
-              </SheetClose>
+              {!isLoaded ? (
+                <div className="h-9 w-full animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
+              ) : isAuthenticated ? (
+                <>
+                  <div className="px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                    <UserIcon className="h-4 w-4 text-neutral-500" />
+                    <span>{displayName}</span>
+                  </div>
+                  <SheetClose asChild>
+                    <Button
+                      variant="outline"
+                      onClick={handleLogout}
+                      className="w-full cursor-pointer justify-center gap-1.5"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </Button>
+                  </SheetClose>
+                </>
+              ) : (
+                <>
+                  <SheetClose asChild>
+                    <Button variant="outline" asChild>
+                      <Link href="/login">Log in</Link>
+                    </Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button
+                      asChild
+                      className="bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+                    >
+                      <Link href="/signin">Get started</Link>
+                    </Button>
+                  </SheetClose>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>
