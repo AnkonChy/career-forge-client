@@ -77,23 +77,18 @@ export const useAuthStore = create<AuthState>()(
               isLoaded: true,
             });
             return true;
-          } else {
+          }
+          return false;
+        } catch (error: any) {
+          // Only clear auth if server explicitly returns 401 Unauthorized (session expired)
+          if (error?.response?.status === 401) {
             set({
               user: null,
               token: null,
               isAuthenticated: false,
               isLoaded: true,
             });
-            return false;
           }
-        } catch (error) {
-          // If cookie is invalid, deleted, or expired (e.g. 401 Unauthorized)
-          set({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-            isLoaded: true,
-          });
           return false;
         }
       },
@@ -123,21 +118,18 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-/**
- * Custom hook to safely access AuthStore and keep it in sync with backend cookies
- */
 export const useAuth = () => {
   const store = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // On initial app load, verify session with backend cookie
+    // Background session verification
     store.checkAuth();
   }, []);
 
   return {
     ...store,
-    isLoaded: mounted && store._hasHydrated && store.isLoaded,
+    isLoaded: mounted,
   };
 };

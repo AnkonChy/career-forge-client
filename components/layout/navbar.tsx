@@ -36,6 +36,7 @@ export function Navbar() {
   const displayName =
     user?.firstName ||
     user?.first_name ||
+    user?.name ||
     (user?.email ? user.email.split("@")[0] : "User");
 
   return (
