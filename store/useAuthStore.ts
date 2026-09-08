@@ -114,8 +114,8 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );
 
 export const useAuth = () => {
@@ -124,12 +124,11 @@ export const useAuth = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Background session verification
     store.checkAuth();
   }, []);
 
   return {
     ...store,
-    isLoaded: mounted,
+    isLoaded: mounted && store.isLoaded, // fix: store er real isLoaded o respect koro
   };
 };

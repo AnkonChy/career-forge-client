@@ -14,12 +14,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import useAxiosPublic from "@/app/hooks/useAxiosPublic";
+import { axiosPrivate } from "@/app/hooks/useAxiosPrivate";
 
 const ACCEPTED_TYPES = [".pdf", ".doc", ".docx"];
 
 export default function AnalyzePage() {
-  const axiosPublic = useAxiosPublic();
+  const axiosPublic = axiosPrivate;
   const router = useRouter();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -45,11 +45,15 @@ export default function AnalyzePage() {
       const formData = new FormData();
       formData.append("resume", selectedFile);
 
-      const response = await axiosPublic.post("/api/resume/analyze", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await axiosPrivate.post(
+        "/api/resume/analyze",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
 
       if (response.data && response.data.success) {
         sessionStorage.setItem(
