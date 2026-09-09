@@ -11,6 +11,8 @@ import {
   ZoomOut,
   RotateCcw,
 } from "lucide-react";
+import { TabSlider } from "./SectionTab";
+import { BasicsForm, defaultBasicsData } from "./BasicForm";
 
 const SECTIONS = [
   { icon: User, label: "Personal Info" },
@@ -22,6 +24,16 @@ const SECTIONS = [
 export function CVBuilder() {
   const [zoom, setZoom] = useState(1);
   const [activeSection, setActiveSection] = useState(0);
+
+  // Basics form data
+  const [basicsData, setBasicsData] = useState(defaultBasicsData);
+
+  const handleBasicsChange = (
+    field: keyof typeof basicsData,
+    value: string
+  ) => {
+    setBasicsData((prev) => ({ ...prev, [field]: value }));
+  };
 
   // CV position
   const [position, setPosition] = useState({
@@ -122,34 +134,27 @@ export function CVBuilder() {
   const handleMouseUp = () => {
     setIsDragging(false);
   };
+
   return (
     <Group orientation="horizontal" className="h-screen bg-[#EDEBE6]">
       {/* Sidebar */}
       <Panel defaultSize="22%" minSize="30%" maxSize="50%">
-        <div className="h-full bg-[#1C1B19] text-[#EDEBE6] flex flex-col">
-          <div className="px-5 py-5 border-b border-white/10">
-            <p className="text-[13px] font-medium tracking-tight text-white/50">
-              Building
-            </p>
-            <p className="text-[15px] font-semibold">Untitled CV</p>
-          </div>
+        <div className="h-full bg-white text-[#1C1B19] flex flex-col">
+          <TabSlider
+            sections={SECTIONS.map((s) => ({ label: s.label }))}
+            active={activeSection}
+            onSelect={setActiveSection}
+          />
 
-          <nav className="flex-1 px-3 py-4 space-y-0.5">
-            {SECTIONS.map(({ icon: Icon, label }, i) => (
-              <button
-                key={label}
-                onClick={() => setActiveSection(i)}
-                className={`w-full flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-left transition-colors ${
-                  activeSection === i
-                    ? "bg-white/10 text-white"
-                    : "text-white/60 hover:bg-white/5 hover:text-white/90"
-                }`}
-              >
-                <Icon className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                {label}
-              </button>
-            ))}
-          </nav>
+          {activeSection === 0 && (
+            <BasicsForm data={basicsData} onChange={handleBasicsChange} />
+          )}
+
+          {activeSection !== 0 && (
+            <p className="text-neutral-400 text-sm p-6">
+              {SECTIONS[activeSection].label} — coming soon
+            </p>
+          )}
         </div>
       </Panel>
 
