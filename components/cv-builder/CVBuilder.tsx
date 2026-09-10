@@ -11,8 +11,10 @@ import {
   ZoomOut,
   RotateCcw,
 } from "lucide-react";
+import { FiMapPin, FiPhone, FiMail, FiExternalLink } from "react-icons/fi";
 import { TabSlider } from "./SectionTab";
 import { BasicsForm, defaultBasicsData } from "./BasicForm";
+import { FaLink } from "react-icons/fa6";
 
 const SECTIONS = [
   { icon: User, label: "Personal Info" },
@@ -30,7 +32,7 @@ export function CVBuilder() {
 
   const handleBasicsChange = (
     field: keyof typeof basicsData,
-    value: string
+    value: string,
   ) => {
     setBasicsData((prev) => ({ ...prev, [field]: value }));
   };
@@ -241,8 +243,77 @@ export function CVBuilder() {
               className="select-none"
             >
               <div className="w-[600px] min-h-[800px] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.08)]">
-                <div className="p-10">
-                  <p className="text-neutral-300 text-sm">CV Preview here</p>
+                <div className="px-10 py-9">
+                  {/* Header */}
+                  <div className="flex items-start gap-4">
+                    {/* Profile Image */}
+                    <div className="w-16 h-16 shrink-0">
+                      {basicsData.avatar ? (
+                        <img
+                          src={basicsData.avatar}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-[#EDEBE6]" />
+                      )}
+                    </div>
+
+                    {/* Right Side */}
+                    <div className="flex-1 min-w-0">
+                      {/* Name */}
+                      <h1 className="text-[24px] leading-[1.1] font-bold text-black">
+                        {basicsData.fullName || "Your Name"}
+                      </h1>
+
+                      {/* Headline */}
+                      <p className="mt-1 text-[15px] leading-5 text-black">
+                        {basicsData.headline || "Your Headline"}
+                      </p>
+
+                      {/* Contact Row */}
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2 text-[12px] leading-4 text-black">
+                        {basicsData.location && (
+                          <span className="flex items-center gap-1">
+                            <FiMapPin size={12} />
+                            <span>{basicsData.location}</span>
+                          </span>
+                        )}
+
+                        {basicsData.location && basicsData.phone && (
+                          <span className="text-neutral-400">|</span>
+                        )}
+
+                        {basicsData.phone && (
+                          <span className="flex items-center gap-1">
+                            <FiPhone size={12} />
+                            <span>{basicsData.phone}</span>
+                          </span>
+                        )}
+
+                        {basicsData.phone && basicsData.email && (
+                          <span className="text-neutral-400">|</span>
+                        )}
+
+                        {basicsData.email && (
+                          <span className="flex items-center gap-1">
+                            <FiMail size={12} />
+                            <span>{basicsData.email}</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Website */}
+                      {basicsData.website && (
+                        <div className="mt-1 flex items-center gap-1 text-[12px] leading-4 text-black">
+                          <FaLink size={12} />
+                          <span className="underline">
+                            {basicsData.website}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
