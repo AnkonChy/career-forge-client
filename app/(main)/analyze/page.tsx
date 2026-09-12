@@ -15,12 +15,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { axiosPrivate } from "@/app/hooks/useAxiosPrivate";
+import { useAuth } from "@/store/useAuthStore";
 
 const ACCEPTED_TYPES = [".pdf", ".doc", ".docx"];
 
 export default function AnalyzePage() {
-  const axiosPublic = axiosPrivate;
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -37,6 +38,11 @@ export default function AnalyzePage() {
 
   const handleAnalyze = async () => {
     if (!selectedFile) return;
+
+    if (!isAuthenticated) {
+      router.push("/login?redirect=/analyze");
+      return;
+    }
 
     setIsLoading(true);
     setErrorMsg(null);
@@ -69,6 +75,10 @@ export default function AnalyzePage() {
       }
     } catch (err: any) {
       console.error("Resume analysis error:", err);
+      if (err.response?.status === 401 || err?.status === 401) {
+        router.push("/login?redirect=/analyze");
+        return;
+      }
       setErrorMsg(
         err.response?.data?.message ||
           "An error occurred while uploading. Make sure backend is running at http://localhost:7000",

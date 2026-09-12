@@ -50,6 +50,16 @@ axiosPrivate.interceptors.response.use(
           isAuthenticated: false,
           isLoaded: true,
         });
+        if (
+          typeof window !== "undefined" &&
+          !window.location.pathname.startsWith("/login")
+        ) {
+          const currentPath =
+            window.location.pathname + window.location.search;
+          window.location.href = `/login?redirect=${encodeURIComponent(
+            currentPath,
+          )}`;
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

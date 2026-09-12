@@ -1,7 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { HiOutlineUser, HiOutlineMail } from "react-icons/hi";
@@ -18,8 +19,10 @@ type SignupInputs = {
   confirmPassword: string;
 };
 
-export default function RegisterPage() {
+function RegisterFormContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
   const axiosPublic = useAxiosPublic();
 
   const {
@@ -44,7 +47,10 @@ export default function RegisterPage() {
 
       reset();
 
-      router.push("/login");
+      const targetLogin = redirectUrl
+        ? `/login?redirect=${encodeURIComponent(redirectUrl)}`
+        : "/login";
+      router.push(targetLogin);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const { errors: fieldErrors, message } = error.response.data;
@@ -213,7 +219,11 @@ export default function RegisterPage() {
           <p className="text-center mt-6 text-sm text-[#666666]">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href={
+                redirectUrl
+                  ? `/login?redirect=${encodeURIComponent(redirectUrl)}`
+                  : "/login"
+              }
               className="text-[#1a1a1a] font-medium hover:underline"
             >
               Log in
@@ -228,5 +238,19 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <p className="text-neutral-500 text-sm">Loading...</p>
+        </div>
+      }
+    >
+      <RegisterFormContent />
+    </Suspense>
   );
 }

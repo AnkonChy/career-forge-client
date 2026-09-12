@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { HiOutlineMail } from "react-icons/hi"; // or react-icons/hi
+import { HiOutlineMail } from "react-icons/hi";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
@@ -17,8 +17,16 @@ type LoginInputs = {
   password: string;
 };
 
-export default function LoginPage() {
+function LoginFormContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawRedirect = searchParams.get("redirect") || "/";
+  // Safe redirect: ensure relative path to prevent open redirect vulnerabilities
+  const redirectUrl =
+    rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
+      ? rawRedirect
+      : "/";
+
   const axiosPublic = useAxiosPublic();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [rememberMe, setRememberMe] = useState(false);
@@ -54,7 +62,7 @@ export default function LoginPage() {
           };
 
         setAuth(user, token);
-        router.push("/");
+        router.push(redirectUrl);
       }
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -62,6 +70,11 @@ export default function LoginPage() {
       }
     }
   };
+
+  const signinHref =
+    redirectUrl && redirectUrl !== "/"
+      ? `/signin?redirect=${encodeURIComponent(redirectUrl)}`
+      : "/signin";
 
   return (
     <div className="login-page min-h-screen flex flex-col justify-between p-6 sm:p-8 lg:p-12 bg-white">
@@ -145,7 +158,7 @@ export default function LoginPage() {
           <p className="text-center mt-6 text-sm text-[#666666]">
             Don't have an account?{" "}
             <Link
-              href="/signin"
+              href={signinHref}
               className="text-[#1a1a1a] font-medium hover:underline"
             >
               Sign in
@@ -159,5 +172,19 @@ export default function LoginPage() {
         <p className="text-[#666666] text-sm">© 2026 Career Forge AI.</p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <p className="text-neutral-500 text-sm">Loading...</p>
+        </div>
+      }
+    >
+      <LoginFormContent />
+    </Suspense>
   );
 }
