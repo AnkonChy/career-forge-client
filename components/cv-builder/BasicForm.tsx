@@ -62,7 +62,7 @@ export function BasicsForm({ data, onChange }: BasicsFormProps) {
           value={data.fullName}
           onChange={(e) => onChange("fullName", e.target.value)}
           className={inputClass}
-          placeholder="Ankon Chowdhury"
+          placeholder="Your name"
         />
       </Field>
 
@@ -73,7 +73,7 @@ export function BasicsForm({ data, onChange }: BasicsFormProps) {
           value={data.headline}
           onChange={(e) => onChange("headline", e.target.value)}
           className={inputClass}
-          placeholder="Full Stack Developer"
+          placeholder="Your designation"
         />
       </Field>
 

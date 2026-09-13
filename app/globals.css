@@ -129,11 +129,68 @@
   }
 }
 
-/* input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
-  -webkit-text-fill-color: #1a1a1a !important;
-  transition: background-color 5000s ease-in-out 0s;
-} */
+/* ==========================================================================
+   CV Print Styles (Perfect A4 PDF Export)
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide app header, sidebars, controls */
+  header,
+  nav,
+  aside,
+  .print\:hidden,
+  [role="separator"],
+  [data-panel-resize-handle] {
+    display: none !important;
+  }
+
+  /* Force resizable panel wrappers to 100% full width */
+  [data-panel-group],
+  [data-panel-group] > [data-panel],
+  div,
+  main,
+  section {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* Target CV preview document - Full page fit */
+  #cv-preview-document {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
