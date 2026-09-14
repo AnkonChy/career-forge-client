@@ -14,7 +14,7 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
-import { useAuth } from "@/store/useAuthStore";
+import { useAuth, initAuth } from "@/store/useAuthStore";
 
 const NAV_LINKS = [
   { href: "/jobs", label: "Find jobs" },
@@ -27,11 +27,21 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, isLoaded, logout } = useAuth();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+    // Verify session with server once on app start (idempotent — no-op if already done)
+    initAuth();
+  }, []);
 
   const handleLogout = async () => {
     await logout();
     router.push("/");
   };
+
+  // Only show auth UI after mount + server verification complete
+  const authReady = mounted && isLoaded;
 
   const displayName =
     user?.firstName ||
@@ -76,7 +86,7 @@ export function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex min-w-[140px] justify-end">
-          {!isLoaded ? (
+          {!authReady ? (
             <div className="h-9 w-36 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
           ) : isAuthenticated ? (
             <div className="flex items-center gap-3">
@@ -148,7 +158,7 @@ export function Navbar() {
             </nav>
 
             <div className="mt-6 flex flex-col gap-2 border-t border-neutral-200 pt-6 dark:border-neutral-800">
-              {!isLoaded ? (
+              {!authReady ? (
                 <div className="h-9 w-full animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
               ) : isAuthenticated ? (
                 <>

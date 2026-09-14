@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { axiosPublic } from "@/app/hooks/useAxiosPublic";
 
 export interface User {
@@ -19,6 +19,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoaded: boolean;
   _hasHydrated: boolean;
+  _authVerified: boolean; // tracks if server has confirmed session this page load
   setAuth: (user: User, token?: string | null) => void;
   setToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
@@ -35,6 +36,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoaded: false,
       _hasHydrated: false,
+      _authVerified: false,
 
       setAuth: (user, token = null) =>
         set({
@@ -42,6 +44,7 @@ export const useAuthStore = create<AuthState>()(
           token,
           isAuthenticated: !!user,
           isLoaded: true,
+          _authVerified: true, // login = verified by definition
         }),
 
       setToken: (token) =>
@@ -75,19 +78,33 @@ export const useAuthStore = create<AuthState>()(
               user: userData,
               isAuthenticated: true,
               isLoaded: true,
+              _authVerified: true,
             });
             return true;
           }
+
+          // Server responded but returned no valid user — clear auth
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            isLoaded: true,
+            _authVerified: true,
+          });
           return false;
         } catch (error: any) {
-          // Only clear auth if server explicitly returns 401 Unauthorized (session expired)
-          if (error?.response?.status === 401) {
+          if (error?.response) {
+            // Server replied with any error status (401, 403, 500…) → session invalid
             set({
               user: null,
               token: null,
               isAuthenticated: false,
               isLoaded: true,
+              _authVerified: true,
             });
+          } else {
+            // Pure network error (no internet) — don't wipe auth, just unblock UI
+            set({ isLoaded: true, _authVerified: true });
           }
           return false;
         }
@@ -111,24 +128,55 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "career-forge-auth",
       storage: createJSONStorage(() => localStorage),
+      // isAuthenticated & _authVerified are NOT persisted.
+      // Every new page load must re-verify the session with the server.
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+      }),
       onRehydrateStorage: () => (state) => {
-        state?.setHasHydrated(true);
+        if (state) {
+          // After hydration, treat session as unverified.
+          // AuthProvider at root level will call checkAuth() once.
+          state.isAuthenticated = false;
+          state.isLoaded = false;
+          state._authVerified = false;
+          state.setHasHydrated(true);
+        }
       },
     },
   ),
 );
 
+/**
+ * Call this ONCE from your root layout/provider.
+ * It checks the session with the server and updates the store.
+ * Subsequent calls are no-ops if already verified this page load.
+ */
+export async function initAuth(): Promise<void> {
+  const { _authVerified, checkAuth } = useAuthStore.getState();
+  if (!_authVerified) {
+    await checkAuth();
+  }
+}
+
+/**
+ * useAuth — reads auth state from the store.
+ * Does NOT trigger its own server request.
+ * Pair this with <AuthProvider> at the root to ensure session is verified.
+ */
 export const useAuth = () => {
   const store = useAuthStore();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    store.checkAuth();
-  }, []);
-
-  return {
-    ...store,
-    isLoaded: mounted && store.isLoaded, // fix: store er real isLoaded o respect koro
-  };
+  return store;
 };
+
+/**
+ * AuthProvider — mount this ONCE at the root (e.g. in app/layout.tsx).
+ * It calls initAuth() on mount to verify the session with the server.
+ */
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    initAuth();
+  }, []);
+  return children as React.ReactElement;
+}
