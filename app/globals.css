@@ -129,9 +129,6 @@
   }
 }
 
-/* ==========================================================================
-   CV Print Styles (Perfect A4 PDF Export)
-   ========================================================================== */
 @media print {
   @page {
     size: A4 portrait;
@@ -149,7 +146,6 @@
     overflow: visible !important;
   }
 
-  /* Hide app header, sidebars, controls */
   header,
   nav,
   aside,
@@ -159,7 +155,6 @@
     display: none !important;
   }
 
-  /* Force resizable panel wrappers to 100% full width */
   [data-panel-group],
   [data-panel-group] > [data-panel],
   div,
@@ -178,7 +173,6 @@
     background: transparent !important;
   }
 
-  /* Target CV preview document - Full page fit */
   #cv-preview-document {
     display: block !important;
     visibility: visible !important;

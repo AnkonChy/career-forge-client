@@ -30,6 +30,7 @@ import { LanguagesForm } from "./LanguagesForm";
 import { CertificationsForm } from "./CertificationsForm";
 import { ProjectsForm } from "./ProjectsForm";
 import { CVPreview } from "./CVPreview";
+import toast from "react-hot-toast";
 import {
   CVData,
   initialCVData,
@@ -57,19 +58,16 @@ export function CVBuilder() {
   const [activeSection, setActiveSection] = useState(0);
   const [cvData, setCvData] = useState<CVData>(initialCVData);
 
-  // Position for dragging paper
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const positionStart = useRef({ x: 0, y: 0 });
 
   const handleDownloadPDF = () => {
+    toast.success("Opening print / export dialog...");
     window.print();
   };
 
-  // -------------------------
-  // Form State Handlers
-  // -------------------------
   const handleBasicsChange = (
     field: keyof typeof cvData.basics,
     value: string
@@ -87,7 +85,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Experience Handlers
   const handleAddExperience = (item: ExperienceItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -107,7 +104,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Education Handlers
   const handleAddEducation = (item: EducationItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -127,7 +123,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Skills Handlers
   const handleAddSkill = (item: SkillItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -147,7 +142,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Languages Handlers
   const handleAddLanguage = (item: LanguageItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -167,7 +161,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Certifications Handlers
   const handleAddCertification = (item: CertificationItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -187,7 +180,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Projects Handlers
   const handleAddProject = (item: ProjectItem) => {
     setCvData((prev) => ({
       ...prev,
@@ -207,7 +199,6 @@ export function CVBuilder() {
     }));
   };
 
-  // Navigation controls
   const handleNextSection = () => {
     if (activeSection < SECTIONS.length - 1) {
       setActiveSection((prev) => prev + 1);
@@ -219,9 +210,6 @@ export function CVBuilder() {
     }
   };
 
-  // -------------------------
-  // Zoom & Drag Controls
-  // -------------------------
   const zoomIn = () => setZoom((z) => Math.min(z + 0.1, 2));
   const zoomOut = () => setZoom((z) => Math.max(z - 0.1, 0.5));
   const resetZoom = () => {
@@ -259,9 +247,7 @@ export function CVBuilder() {
 
   return (
     <div className="h-screen flex flex-col bg-[#EDEBE6] overflow-hidden">
-      {/* Top Header Navbar */}
       <header className="h-14 border-b border-[#D8D5CC] bg-white px-5 flex items-center justify-between shrink-0 z-20 print:hidden">
-        {/* Left: Dashboard Button */}
         <Link
           href="/"
           className="bg-[#1C1B19] hover:bg-black text-white text-xs font-medium px-3.5 py-2 rounded-md flex items-center gap-1.5 transition-colors shadow-sm"
@@ -270,7 +256,6 @@ export function CVBuilder() {
           <span>Dashboard</span>
         </Link>
 
-        {/* Middle: Logo */}
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded bg-[#10B981] flex items-center justify-center text-white font-bold text-[10px]">
             CF
@@ -280,7 +265,6 @@ export function CVBuilder() {
           </span>
         </div>
 
-        {/* Right: History & Save/Download */}
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -302,10 +286,8 @@ export function CVBuilder() {
         </div>
       </header>
 
-      {/* Main Panelled Workspace */}
       <div className="flex-1 overflow-hidden">
         <Group orientation="horizontal" className="h-full bg-[#EDEBE6]">
-          {/* Sidebar Form Panel */}
           <Panel defaultSize="32%" minSize="28%" maxSize="50%" className="print:hidden">
             <div className="h-full bg-white text-[#1C1B19] flex flex-col">
               <TabSlider
@@ -314,7 +296,6 @@ export function CVBuilder() {
                 onSelect={setActiveSection}
               />
 
-              {/* 0: Personal Info */}
               {activeSection === 0 && (
                 <div className="flex-1 flex flex-col justify-between overflow-y-auto">
                   <BasicsForm data={cvData.basics} onChange={handleBasicsChange} />
@@ -330,7 +311,6 @@ export function CVBuilder() {
                 </div>
               )}
 
-              {/* 1: Summary */}
               {activeSection === 1 && (
                 <SummaryForm
                   data={cvData.summary}
@@ -340,7 +320,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 2: Experience */}
               {activeSection === 2 && (
                 <ExperienceForm
                   items={cvData.experience}
@@ -352,7 +331,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 3: Education */}
               {activeSection === 3 && (
                 <EducationForm
                   items={cvData.education}
@@ -364,7 +342,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 4: Skills */}
               {activeSection === 4 && (
                 <SkillsForm
                   items={cvData.skills}
@@ -376,7 +353,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 5: Languages */}
               {activeSection === 5 && (
                 <LanguagesForm
                   items={cvData.languages}
@@ -388,7 +364,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 6: Certifications */}
               {activeSection === 6 && (
                 <CertificationsForm
                   items={cvData.certifications}
@@ -400,7 +375,6 @@ export function CVBuilder() {
                 />
               )}
 
-              {/* 7: Projects */}
               {activeSection === 7 && (
                 <ProjectsForm
                   items={cvData.projects}
@@ -413,13 +387,10 @@ export function CVBuilder() {
             </div>
           </Panel>
 
-          {/* Resize Handle */}
           <Separator className="w-[2px] bg-[#D8D5CC] hover:bg-[#B08968] active:bg-[#95724F] cursor-col-resize transition-colors print:hidden" />
 
-          {/* Preview Area */}
           <Panel defaultSize="68%">
             <div className="flex h-full flex-col">
-              {/* Zoom Toolbar */}
               <div className="flex items-center justify-center gap-1 border-b border-[#D8D5CC] py-2.5 bg-[#F5F3EF] print:hidden">
                 <button
                   onClick={zoomOut}
@@ -452,7 +423,6 @@ export function CVBuilder() {
                 </button>
               </div>
 
-              {/* CV Canvas */}
               <div
                 className={`flex-1 overflow-auto flex items-center justify-center bg-[#EDEBE6] py-12 print:p-0 print:m-0 print:bg-white print:overflow-visible ${
                   isDragging ? "cursor-grabbing" : "cursor-grab"

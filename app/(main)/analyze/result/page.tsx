@@ -93,7 +93,6 @@ export default function AnalysisResultPage() {
   return (
     <div className="min-h-screen bg-neutral-50/50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl space-y-8">
-        {/* Navigation & Header Actions */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             variant="ghost"
@@ -111,7 +110,6 @@ export default function AnalysisResultPage() {
           </span>
         </div>
 
-        {/* Hero Card: Candidate Header & Validity */}
         <div className="rounded-3xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 relative overflow-hidden">
           <div className="absolute top-0 right-0 h-40 w-40 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -147,7 +145,6 @@ export default function AnalysisResultPage() {
           </div>
         </div>
 
-        {/* Section 1: Executive Summary */}
         <div className="rounded-3xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
           <div className="flex items-center gap-3 mb-4">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400">
@@ -162,7 +159,6 @@ export default function AnalysisResultPage() {
           </p>
         </div>
 
-        {/* Section 2: Extracted Skills */}
         {data.skills && data.skills.length > 0 && (
           <div className="rounded-3xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex items-center gap-3 mb-5">
@@ -188,7 +184,6 @@ export default function AnalysisResultPage() {
           </div>
         )}
 
-        {/* Section 3: AI Recommendations / Suggestions */}
         {data.suggestions && data.suggestions.length > 0 && (
           <div className="rounded-3xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex items-center gap-3 mb-5">
@@ -218,7 +213,6 @@ export default function AnalysisResultPage() {
           </div>
         )}
 
-        {/* Section 4: Tailored Interview Questions */}
         {data.questions && data.questions.length > 0 && (
           <div className="rounded-3xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
             <div className="flex items-center justify-between gap-4 mb-6">

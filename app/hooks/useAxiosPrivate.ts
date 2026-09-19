@@ -2,8 +2,8 @@ import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export const axiosPrivate = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL, // tomar backend base url
-  withCredentials: true, // cookie pathanor jonno must
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
 });
 
 let isRefreshing = false;
@@ -27,7 +27,6 @@ axiosPrivate.interceptors.response.use(
 
     if (error?.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // already refresh cholche, queue e wait koro
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -39,7 +38,7 @@ axiosPrivate.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axiosPrivate.post("/api/auth/refresh"); // backend er refresh endpoint
+        await axiosPrivate.post("/api/auth/refresh");
         processQueue(null);
         return axiosPrivate(originalRequest);
       } catch (refreshError) {

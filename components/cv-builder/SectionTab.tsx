@@ -21,7 +21,6 @@ export function TabSlider({ sections, active, onSelect }: TabSliderProps) {
 
   return (
     <div className="flex items-center gap-2 border-b border-[#D8D5CC] bg-white px-3 py-2">
-      {/* Left arrow */}
       <button
         onClick={() => scroll("left")}
         className="h-8 w-8 rounded-full border border-[#D8D5CC] flex items-center justify-center shrink-0 text-[#4A4640] hover:bg-black/5 transition-colors"
@@ -29,7 +28,6 @@ export function TabSlider({ sections, active, onSelect }: TabSliderProps) {
         <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
       </button>
 
-      {/* Scrollable tab strip */}
       <div
         ref={scrollRef}
         className="flex gap-1 overflow-x-auto scroll-smooth no-scrollbar"
@@ -49,7 +47,6 @@ export function TabSlider({ sections, active, onSelect }: TabSliderProps) {
         ))}
       </div>
 
-      {/* Right arrow */}
       <button
         onClick={() => scroll("right")}
         className="h-8 w-8 rounded-full border border-[#D8D5CC] flex items-center justify-center shrink-0 text-[#4A4640] hover:bg-black/5 transition-colors"

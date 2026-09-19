@@ -19,7 +19,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoaded: boolean;
   _hasHydrated: boolean;
-  _authVerified: boolean; // tracks if server has confirmed session this page load
+  _authVerified: boolean;
   setAuth: (user: User, token?: string | null) => void;
   setToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
           token,
           isAuthenticated: !!user,
           isLoaded: true,
-          _authVerified: true, // login = verified by definition
+          _authVerified: true,
         }),
 
       setToken: (token) =>
@@ -83,7 +83,6 @@ export const useAuthStore = create<AuthState>()(
             return true;
           }
 
-          // Server responded but returned no valid user — clear auth
           set({
             user: null,
             token: null,
@@ -94,7 +93,6 @@ export const useAuthStore = create<AuthState>()(
           return false;
         } catch (error: any) {
           if (error?.response) {
-            // Server replied with any error status (401, 403, 500…) → session invalid
             set({
               user: null,
               token: null,
@@ -103,7 +101,6 @@ export const useAuthStore = create<AuthState>()(
               _authVerified: true,
             });
           } else {
-            // Pure network error (no internet) — don't wipe auth, just unblock UI
             set({ isLoaded: true, _authVerified: true });
           }
           return false;
@@ -114,7 +111,6 @@ export const useAuthStore = create<AuthState>()(
         try {
           await axiosPublic.post("/api/auth/logout");
         } catch (error) {
-          // Ignore network errors during logout
         } finally {
           set({
             user: null,
@@ -128,16 +124,12 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "career-forge-auth",
       storage: createJSONStorage(() => localStorage),
-      // isAuthenticated & _authVerified are NOT persisted.
-      // Every new page load must re-verify the session with the server.
       partialize: (state) => ({
         user: state.user,
         token: state.token,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // After hydration, treat session as unverified.
-          // AuthProvider at root level will call checkAuth() once.
           state.isAuthenticated = false;
           state.isLoaded = false;
           state._authVerified = false;
@@ -148,11 +140,6 @@ export const useAuthStore = create<AuthState>()(
   ),
 );
 
-/**
- * Call this ONCE from your root layout/provider.
- * It checks the session with the server and updates the store.
- * Subsequent calls are no-ops if already verified this page load.
- */
 export async function initAuth(): Promise<void> {
   const { _authVerified, checkAuth } = useAuthStore.getState();
   if (!_authVerified) {
@@ -160,20 +147,11 @@ export async function initAuth(): Promise<void> {
   }
 }
 
-/**
- * useAuth — reads auth state from the store.
- * Does NOT trigger its own server request.
- * Pair this with <AuthProvider> at the root to ensure session is verified.
- */
 export const useAuth = () => {
   const store = useAuthStore();
   return store;
 };
 
-/**
- * AuthProvider — mount this ONCE at the root (e.g. in app/layout.tsx).
- * It calls initAuth() on mount to verify the session with the server.
- */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     initAuth();

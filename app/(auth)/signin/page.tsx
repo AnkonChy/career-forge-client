@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import useAxiosPublic from "@/app/hooks/useAxiosPublic";
+import toast from "react-hot-toast";
 
 type SignupInputs = {
   firstName: string;
@@ -35,7 +36,7 @@ function RegisterFormContent() {
 
   const onSubmit: SubmitHandler<SignupInputs> = async (data) => {
     try {
-      const response = await axiosPublic.post("/api/auth/signup", {
+      await axiosPublic.post("/api/auth/signup", {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
@@ -43,17 +44,22 @@ function RegisterFormContent() {
         confirmPassword: data.confirmPassword,
       });
 
-      console.log(response);
-
       reset();
 
       const targetLogin = redirectUrl
         ? `/login?redirect=${encodeURIComponent(redirectUrl)}`
         : "/login";
       router.push(targetLogin);
+      toast.success("Account created successfully! Please log in.");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
         const { errors: fieldErrors, message } = error.response.data;
+
+        if (message) {
+          toast.error(message);
+        } else {
+          toast.error("Registration failed. Please check your inputs.");
+        }
 
         if (fieldErrors) {
           if (fieldErrors.firstName || fieldErrors.first_name) {
@@ -80,6 +86,8 @@ function RegisterFormContent() {
         } else if (message) {
           setError("email", { message });
         }
+      } else {
+        toast.error("An error occurred during sign up. Please try again.");
       }
     }
   };

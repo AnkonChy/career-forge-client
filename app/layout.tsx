@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Career Forge - AI Resume Analyzer & Job Matching",
-  description: "Forge a resume that gets you hired. AI-powered line-by-line analysis.",
+  description:
+    "Forge a resume that gets you hired. AI-powered line-by-line analysis.",
 };
 
 export default function RootLayout({
@@ -32,6 +34,25 @@ export default function RootLayout({
     <html lang="en" className={poppins.className}>
       <body className="min-h-screen flex flex-col antialiased">
         {children}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+            style: {
+              background: "#18181b",
+              color: "#ffffff",
+              borderRadius: "10px",
+              fontSize: "14px",
+              padding: "12px 16px",
+            },
+            success: {
+              iconTheme: {
+                primary: "#f97316",
+                secondary: "#ffffff",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

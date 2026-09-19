@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAxiosPublic from "@/app/hooks/useAxiosPublic";
 import { useAuthStore } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 type LoginInputs = {
   email: string;
@@ -21,7 +22,6 @@ function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawRedirect = searchParams.get("redirect") || "/";
-  // Safe redirect: ensure relative path to prevent open redirect vulnerabilities
   const redirectUrl =
     rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
       ? rawRedirect
@@ -47,6 +47,7 @@ function LoginFormContent() {
       });
 
       if (response.data) {
+        toast.success("Login successful");
         const resData = response.data;
         const token =
           resData.token ||
@@ -54,8 +55,7 @@ function LoginFormContent() {
           resData.data?.token ||
           resData.data?.accessToken ||
           null;
-        const user =
-          resData.user ||
+        const user = resData.user ||
           resData.data?.user ||
           (resData.data && !resData.data?.token ? resData.data : null) || {
             email: data.email,
@@ -65,6 +65,10 @@ function LoginFormContent() {
         router.push(redirectUrl);
       }
     } catch (error: any) {
+      const msg =
+        error.response?.data?.message ||
+        "Login failed. Please check your credentials.";
+      toast.error(msg);
       if (error.response?.data?.message) {
         setError("email", { message: error.response.data.message });
       }
@@ -167,7 +171,6 @@ function LoginFormContent() {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="mt-auto pt-8">
         <p className="text-[#666666] text-sm">© 2026 Career Forge AI.</p>
       </div>

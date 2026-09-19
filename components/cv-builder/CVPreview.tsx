@@ -19,7 +19,6 @@ export function CVPreview({ data }: CVPreviewProps) {
     projects,
   } = data;
 
-  // Helper to parse header links (e.g. GitHub | LinkedIn | Portfolio)
   const parseHeaderLinks = (input: string) => {
     if (!input) return [];
     const parts = input.split(/[\n|,]+/).map((s) => s.trim()).filter(Boolean);
@@ -43,9 +42,7 @@ export function CVPreview({ data }: CVPreviewProps) {
       className="w-[650px] min-h-[850px] bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.08)] p-10 font-sans leading-relaxed text-[#111827] print:w-full print:max-w-none print:min-h-0 print:p-0 print:m-0 print:shadow-none"
       style={{ fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}
     >
-      {/* Header */}
       <div className="flex items-start gap-4 pb-2">
-        {/* Profile Image */}
         {basics.avatar && (
           <div className="w-16 h-16 shrink-0 overflow-hidden rounded bg-[#EDEBE6]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -57,7 +54,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </div>
         )}
 
-        {/* Info */}
         <div className="flex-1 min-w-0 font-sans">
           <h1 className="text-[24px] leading-[1.1] font-bold text-black tracking-tight">
             {basics.fullName || "Your Name"}
@@ -67,7 +63,6 @@ export function CVPreview({ data }: CVPreviewProps) {
             {basics.headline || "Your Headline"}
           </p>
 
-          {/* Contact details */}
           <div className="mt-2 flex flex-wrap items-center gap-x-2 text-[12px] text-neutral-700">
             {basics.location && (
               <span className="flex items-center gap-1">
@@ -99,7 +94,6 @@ export function CVPreview({ data }: CVPreviewProps) {
             )}
           </div>
 
-          {/* Website / Social Links */}
           {headerLinks.length > 0 && (
             <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[12px] font-bold text-black">
               {headerLinks.map((link, idx) => (
@@ -122,9 +116,7 @@ export function CVPreview({ data }: CVPreviewProps) {
         </div>
       </div>
 
-      {/* Main Content Body */}
       <div className="mt-4 space-y-5 text-[12px] text-neutral-900">
-        {/* Summary */}
         {summary.summary && (
           <section className="space-y-1">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1.5">
@@ -136,7 +128,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Experience */}
         {experience.length > 0 && (
           <section className="space-y-3">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">
@@ -168,7 +159,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Education */}
         {education.length > 0 && (
           <section className="space-y-3">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">
@@ -203,7 +193,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Skills */}
         {skills.length > 0 && (
           <section className="space-y-2">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">
@@ -214,7 +203,6 @@ export function CVPreview({ data }: CVPreviewProps) {
                 <div key={item.id} className="flex flex-col text-[12px]">
                   <span className="font-bold text-black text-[12px]">{item.name}</span>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    {/* Render rating dots */}
                     <div className="flex gap-1">
                       {[1, 2, 3, 4].map((dotIndex) => {
                         const isFilled =
@@ -258,7 +246,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Languages */}
         {languages.length > 0 && (
           <section className="space-y-1.5">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">
@@ -275,7 +262,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Certifications */}
         {certifications.length > 0 && (
           <section className="space-y-2">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">
@@ -310,7 +296,6 @@ export function CVPreview({ data }: CVPreviewProps) {
           </section>
         )}
 
-        {/* Projects */}
         {projects.length > 0 && (
           <section className="space-y-3">
             <h3 className="font-sans font-bold text-[15px] uppercase text-black border-b border-neutral-400 pb-0.5 mb-1">

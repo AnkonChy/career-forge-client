@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { axiosPrivate } from "@/app/hooks/useAxiosPrivate";
 import { useAuth } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 const ACCEPTED_TYPES = [".pdf", ".doc", ".docx"];
 
@@ -40,6 +41,7 @@ export default function AnalyzePage() {
     if (!selectedFile) return;
 
     if (!isAuthenticated) {
+      toast.error("Please log in to analyze your resume.");
       router.push("/login?redirect=/analyze");
       return;
     }
@@ -62,27 +64,30 @@ export default function AnalyzePage() {
       );
 
       if (response.data && response.data.success) {
+        toast.success("Resume analyzed successfully");
         sessionStorage.setItem(
           "resumeAnalysisResult",
           JSON.stringify(response.data.data),
         );
         router.push("/analyze/result");
       } else {
-        setErrorMsg(
+        const msg =
           response.data?.message ||
-            "Failed to analyze resume. Please try again.",
-        );
+          "Failed to analyze resume. Please try again.";
+        setErrorMsg(msg);
+        toast.error(msg);
       }
     } catch (err: any) {
-      console.error("Resume analysis error:", err);
       if (err.response?.status === 401 || err?.status === 401) {
+        toast.error("Session expired. Please log in again.");
         router.push("/login?redirect=/analyze");
         return;
       }
-      setErrorMsg(
+      const msg =
         err.response?.data?.message ||
-          "An error occurred while uploading. Make sure backend is running at http://localhost:7000",
-      );
+        "An error occurred while uploading. Please check backend connection.";
+      setErrorMsg(msg);
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }

@@ -33,7 +33,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-1 border border-[#D8D5CC] border-b-0 bg-[#FBFBFA] px-2 py-1.5 rounded-t-md text-[#4A4640]">
-      {/* B / I / S / U */}
       <button
         type="button"
         onClick={() => insert("**", "**")}
@@ -72,7 +71,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
       <div className="w-px h-4 bg-[#D8D5CC] mx-1" />
 
-      {/* Link / Code */}
       <button
         type="button"
         onClick={() => insert("[", "](url)")}
@@ -93,7 +91,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
       <div className="w-px h-4 bg-[#D8D5CC] mx-1" />
 
-      {/* Headings / Paragraph */}
       <button
         type="button"
         onClick={() => insert("# ")}
@@ -132,7 +129,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
       <div className="w-px h-4 bg-[#D8D5CC] mx-1" />
 
-      {/* Alignments */}
       <button
         type="button"
         className="p-1 rounded hover:bg-black/5 transition-colors"
@@ -159,7 +155,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
       <div className="w-px h-4 bg-[#D8D5CC] mx-1" />
 
-      {/* Lists */}
       <button
         type="button"
         onClick={() => insert("\n- ")}
@@ -180,7 +175,6 @@ export function RichTextToolbar({ onInsertSymbol }: RichTextToolbarProps) {
 
       <div className="w-px h-4 bg-[#D8D5CC] mx-1" />
 
-      {/* Undo / Redo */}
       <button
         type="button"
         className="p-1 rounded hover:bg-black/5 transition-colors"

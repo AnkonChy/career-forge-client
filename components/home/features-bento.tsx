@@ -21,7 +21,6 @@ const AUDIT_FACTORS = [
 export function FeaturesBento() {
   return (
     <div>
-      {/* Section Header */}
       <div className="mx-auto max-w-3xl text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3.5 py-1 text-xs font-semibold text-orange-600 dark:text-orange-400">
           <Sparkles className="h-3.5 w-3.5" />
@@ -38,9 +37,7 @@ export function FeaturesBento() {
         </p>
       </div>
 
-      {/* Bento Grid */}
       <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* Card 1: Live ATS Simulation & Scoring Diagnostic */}
         <div className="group relative overflow-hidden rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md sm:p-8 lg:col-span-7 dark:border-neutral-800 dark:bg-neutral-900/90">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -61,7 +58,6 @@ export function FeaturesBento() {
             </span>
           </div>
 
-          {/* Score metric visual */}
           <div className="mt-6 flex flex-col items-center justify-between gap-6 rounded-2xl border border-neutral-100 bg-neutral-50/80 p-5 sm:flex-row dark:border-neutral-800/80 dark:bg-neutral-950/60">
             <div className="flex items-center gap-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-2xl font-black text-white shadow-lg shadow-orange-500/20">
@@ -82,7 +78,6 @@ export function FeaturesBento() {
             </div>
           </div>
 
-          {/* Breakdown Progress Bars */}
           <div className="mt-6 space-y-3.5">
             {AUDIT_FACTORS.map((factor) => (
               <div key={factor.label} className="space-y-1.5">
@@ -105,7 +100,6 @@ export function FeaturesBento() {
           </div>
         </div>
 
-        {/* Card 2: AI Bullet Point Forger */}
         <div className="group relative overflow-hidden rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md sm:p-8 lg:col-span-5 dark:border-neutral-800 dark:bg-neutral-900/90">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
@@ -152,7 +146,6 @@ export function FeaturesBento() {
           </div>
         </div>
 
-        {/* Card 3: Targeted Keyword Radar */}
         <div className="group rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md sm:p-7 lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900/90">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
@@ -185,7 +178,6 @@ export function FeaturesBento() {
           </div>
         </div>
 
-        {/* Card 4: 1-Click Formatting Guard */}
         <div className="group rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md sm:p-7 lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900/90">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
@@ -211,7 +203,6 @@ export function FeaturesBento() {
           </div>
         </div>
 
-        {/* Card 5: Real-time Job Fit Matcher */}
         <div className="group rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md sm:p-7 lg:col-span-4 dark:border-neutral-800 dark:bg-neutral-900/90">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">

@@ -35,7 +35,6 @@ export function Footer() {
     <footer className="w-full border-t border-neutral-200/80 bg-neutral-50/50 dark:border-neutral-800 dark:bg-neutral-950">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-          {/* Brand Info & Newsletter */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
               <span className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 dark:bg-white">
@@ -74,7 +73,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Navigation Columns */}
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8 lg:pl-8">
             <div>
               <h3 className="text-xs font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
@@ -132,7 +130,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-200/80 pt-8 sm:flex-row dark:border-neutral-800">
           <p className="text-xs text-neutral-500 dark:text-neutral-500">
             &copy; {new Date().getFullYear()} Career Forge Inc. All rights reserved.

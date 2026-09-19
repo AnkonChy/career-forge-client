@@ -97,13 +97,11 @@ export function CertificationsForm({
   return (
     <div className="flex-1 flex flex-col justify-between overflow-y-auto px-5 py-5 text-[#1C1B19]">
       <div className="space-y-4">
-        {/* Title */}
         <div className="flex items-center gap-2">
           <Award size={20} className="text-[#1C1B19]" />
           <h2 className="text-xl font-bold text-[#1C1B19]">Certifications</h2>
         </div>
 
-        {/* List of items */}
         <div className="space-y-2">
           {items.map((item) => (
             <div
@@ -145,7 +143,6 @@ export function CertificationsForm({
             </div>
           ))}
 
-          {/* Add item button */}
           <button
             type="button"
             onClick={handleOpenAdd}
@@ -157,7 +154,6 @@ export function CertificationsForm({
         </div>
       </div>
 
-      {/* Modal Dialog */}
       <ItemModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -221,7 +217,6 @@ export function CertificationsForm({
         </FormField>
       </ItemModal>
 
-      {/* Navigation buttons */}
       <div className="pt-6 flex items-center gap-3">
         {onPrev && (
           <button

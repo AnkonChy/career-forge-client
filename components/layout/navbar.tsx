@@ -15,6 +15,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useAuth, initAuth } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 const NAV_LINKS = [
   { href: "/jobs", label: "Find jobs" },
@@ -31,16 +32,15 @@ export function Navbar() {
 
   React.useEffect(() => {
     setMounted(true);
-    // Verify session with server once on app start (idempotent — no-op if already done)
     initAuth();
   }, []);
 
   const handleLogout = async () => {
     await logout();
+    toast.success("Logged out successfully");
     router.push("/");
   };
 
-  // Only show auth UI after mount + server verification complete
   const authReady = mounted && isLoaded;
 
   const displayName =
@@ -52,7 +52,6 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200/80 bg-white/85 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/85">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
           <span className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 dark:bg-white">
             <Flame className="h-4.5 w-4.5 text-orange-500" strokeWidth={2.25} />
@@ -62,7 +61,6 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex md:items-center md:gap-1">
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
@@ -84,7 +82,6 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex min-w-[140px] justify-end">
           {!authReady ? (
             <div className="h-9 w-36 animate-pulse rounded-md bg-neutral-100 dark:bg-neutral-800" />
@@ -120,7 +117,6 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile menu */}
         <Sheet>
           <SheetTrigger asChild>
             <Button

@@ -40,12 +40,10 @@ export function ItemModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px] animate-fadeIn">
-      {/* Modal Container */}
       <div
         className="w-full max-w-xl bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-[#D8D5CC] text-[#1C1B19]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#EDEBE6]">
           <div className="flex items-center gap-2 font-bold text-lg text-[#1C1B19]">
             {!isEditing && <Plus size={18} className="text-[#1C1B19]" />}
@@ -60,11 +58,9 @@ export function ItemModal({
           </button>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={onSubmit} className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
           {children}
 
-          {/* Modal Footer / Submit Button */}
           <div className="pt-4 flex items-center justify-between border-t border-[#EDEBE6] mt-6">
             {isEditing && onDelete ? (
               <button
