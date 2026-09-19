@@ -19,10 +19,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface IdealAnswer {
+  coreAnswer: string;
+  keyPoints: string[];
+  example: string;
+}
+
 interface QuestionItem {
   question: string;
   type: string;
-  idealAnswer: string;
+  idealAnswer: IdealAnswer;
 }
 
 interface AnalysisData {
@@ -38,7 +44,9 @@ export default function AnalysisResultPage() {
   const router = useRouter();
   const [data, setData] = React.useState<AnalysisData | null>(null);
   const [loading, setLoading] = React.useState(true);
-  const [openQuestionIndex, setOpenQuestionIndex] = React.useState<number | null>(0);
+  const [openQuestionIndex, setOpenQuestionIndex] = React.useState<
+    number | null
+  >(0);
 
   React.useEffect(() => {
     const stored = sessionStorage.getItem("resumeAnalysisResult");
@@ -58,7 +66,9 @@ export default function AnalysisResultPage() {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center space-y-3">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-500 border-t-transparent mx-auto" />
-          <p className="text-sm text-neutral-500">Loading analysis results...</p>
+          <p className="text-sm text-neutral-500">
+            Loading analysis results...
+          </p>
         </div>
       </div>
     );
@@ -74,9 +84,13 @@ export default function AnalysisResultPage() {
           No Resume Data Found
         </h2>
         <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-          Please upload a resume first to view the detailed AI analysis and interview preparation details.
+          Please upload a resume first to view the detailed AI analysis and
+          interview preparation details.
         </p>
-        <Button asChild className="mt-6 bg-orange-600 hover:bg-orange-700 text-white rounded-full">
+        <Button
+          asChild
+          className="mt-6 bg-orange-600 hover:bg-orange-700 text-white rounded-full"
+        >
           <Link href="/analyze">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Upload Resume
@@ -256,6 +270,7 @@ export default function AnalysisResultPage() {
                         >
                           {q.type}
                         </span>
+
                         <span className="text-base font-semibold text-neutral-900 dark:text-white">
                           {q.question}
                         </span>
@@ -272,13 +287,57 @@ export default function AnalysisResultPage() {
 
                     {isOpen && (
                       <div className="border-t border-neutral-100 bg-neutral-50/80 p-5 dark:border-neutral-800 dark:bg-neutral-900/60">
-                        <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400">
+                        <div className="flex items-center gap-2 mb-4 text-xs font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400">
                           <Sparkles className="h-3.5 w-3.5" />
                           Ideal Sample Response
                         </div>
-                        <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal">
-                          {q.idealAnswer}
-                        </p>
+
+                        <div className="space-y-4">
+                          {/* Core Answer */}
+                          <div>
+                            <p className="mb-1.5 text-sm font-semibold text-neutral-900 dark:text-white">
+                              Core Answer
+                            </p>
+
+                            <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                              {q.idealAnswer.coreAnswer}
+                            </p>
+                          </div>
+
+                          {/* Key Points */}
+                          {q.idealAnswer.keyPoints?.length > 0 && (
+                            <div>
+                              <p className="mb-2 text-sm font-semibold text-neutral-900 dark:text-white">
+                                Key Points
+                              </p>
+
+                              <ul className="space-y-2">
+                                {q.idealAnswer.keyPoints.map((point, index) => (
+                                  <li
+                                    key={index}
+                                    className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300"
+                                  >
+                                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
+                                    <span>{point}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Example */}
+                          {q.idealAnswer.example && (
+                            <div>
+                              <p className="mb-1.5 text-sm font-semibold text-neutral-900 dark:text-white">
+                                Example
+                              </p>
+
+                              <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                                {q.idealAnswer.example}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
