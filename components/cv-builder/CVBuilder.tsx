@@ -64,8 +64,74 @@ export function CVBuilder() {
   const positionStart = useRef({ x: 0, y: 0 });
 
   const handleDownloadPDF = () => {
-    toast.success("Opening print / export dialog...");
-    window.print();
+    const element = document.getElementById("cv-preview-document");
+    if (!element) {
+      toast.error("CV preview not found");
+      return;
+    }
+
+    const printWindow = window.open("", "_blank", "width=800,height=1000");
+    if (!printWindow) {
+      toast.error("Please allow popups to download PDF");
+      return;
+    }
+
+    const cvContent = element.cloneNode(true) as HTMLElement;
+    // Remove fixed width/shadow since we want full-page print
+    cvContent.style.width = "100%";
+    cvContent.style.maxWidth = "100%";
+    cvContent.style.boxShadow = "none";
+    cvContent.style.minHeight = "auto";
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${cvData.basics.fullName || "CV"} - Resume</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+          @page {
+            size: A4 portrait;
+            margin: 10mm 12mm;
+          }
+
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #111827;
+            background: #fff;
+            padding: 6mm 8mm;
+            line-height: 1.5;
+          }
+
+          section { page-break-inside: avoid; }
+          h1, h2, h3 { page-break-after: avoid; }
+        </style>
+      </head>
+      <body>
+        ${cvContent.outerHTML}
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+
+    // Wait for fonts to load, then print
+    printWindow.onload = () => {
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
+    };
+
+    toast.success("Opening print dialog...");
   };
 
   const handleBasicsChange = (

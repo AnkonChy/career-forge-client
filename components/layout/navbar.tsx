@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 const NAV_LINKS = [
   { href: "/jobs", label: "Find jobs" },
   { href: "/companies", label: "Companies" },
-  { href: "/resources", label: "Resources" },
+  { href: "/cv-builder", label: "CV Builder" },
   { href: "/pricing", label: "Pricing" },
 ];
 
